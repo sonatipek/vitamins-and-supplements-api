@@ -4,6 +4,13 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 require("dotenv").config();
 
+// *Custom Modules
+// Routes Definitions
+const vitaminsRoutes = require('./routes/vitamins');
+const supplementsRoutes = require('./routes/supplement');
+
+
+// Instance
 const app = express();
 
 
@@ -13,17 +20,18 @@ app.use(cors({
     origin: "*",
     methods: ["GET"]
 }));
-// Controllers
+
 
 // Routes
-app.use('/', (req, res) => {
-    res.json("Hello world!");
-});
+app.use('/api/vitamin', vitaminsRoutes);
+app.use('/api/supplement', supplementsRoutes);
+
 
 // MongoDB Connection
 mongoose.connect(process.env.MONGO_CONNECTION)
     .then(_ => console.log("MongoDB connection is succeeded."))
     .catch((err) => console.log(err));
+
     
 // Start server
 const PORT = process.env.PORT || 3000;
