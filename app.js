@@ -1,7 +1,8 @@
 // Node Modules
 const express = require('express');
 const cors = require('cors');
-
+const mongoose = require('mongoose');
+require("dotenv").config();
 
 const app = express();
 
@@ -19,6 +20,11 @@ app.use('/', (req, res) => {
     res.json("Hello world!");
 });
 
+// MongoDB Connection
+mongoose.connect(process.env.MONGO_CONNECTION)
+    .then(_ => console.log("MongoDB connection is succeeded."))
+    .catch((err) => console.log(err));
+    
 // Start server
 const PORT = process.env.PORT || 3000;
 
