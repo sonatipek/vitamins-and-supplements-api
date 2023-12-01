@@ -6,13 +6,11 @@ const router = express.Router();
 const vitaminController = require('../controllers/vitaminController');
 
 
+router.get('/getVitamins/:tag', vitaminController.fetchVitaminsByTag);
+
 router.get("/getVitamins", vitaminController.fetchVitaminsAll);
 
-router.get('/getVitaminsByName', vitaminController.fetchVitaminsByName);
-
-router.get('/getVitaminsByRate', vitaminController.fetchVitaminsByRate);
-
-router.get('/getVitaminsByTag', vitaminController.fetchVitaminsByTag);
+router.get('/getVitamin', vitaminController.fetchVitaminByName);
 
 router.post('/createVitamin', vitaminController.createVitamin);
 

@@ -7,19 +7,17 @@ const router = express.Router();
 const supplementController = require('../controllers/supplementController');
 
 
+router.get('/getSupplements/:tag', supplementController.fetchSupplementsByTag);
+
 router.get("/getSupplements", supplementController.fetchSupplementsAll);
 
-router.get('/getSupplementsByName', supplementController.fetchSupplementsByName);
+router.get('/getSupplement', supplementController.fetchSupplementByName);
 
-router.get('/getSupplementsByRate', supplementController.fetchSupplementsByRate);
+router.post('/createSupplement', supplementController.createSupplement);
 
-router.get('/getSupplementsByTag', supplementController.fetchSupplementsByTag);
+router.put('/updateSupplement', supplementController.updateSupplement);
 
-router.post('/createSupplement', supplementController.creatSupplement);
-
-router.put('/updateSupplement', supplementController.updatSupplement);
-
-router.delete('/deleteSupplement', supplementController.deletSupplement);
+router.delete('/deleteSupplement', supplementController.deleteSupplement);
 
 
 module.exports = router;
