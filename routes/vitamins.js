@@ -1,47 +1,23 @@
+// Node Modules
 const express = require('express');
-
 const router = express.Router();
 
-router.get("/getVitamins", async (req, res) => {
-    res.json({
-        vitamins: "getVitamins"
-    })
-});
+// Required Controller
+const vitaminController = require('../controllers/vitaminController');
 
-router.get('/getVitaminsByName', async (req, res ) => {
-    res.json({
-        vitamins: "getVitaminsByName"
-    });
-});
 
-router.get('/getVitaminsByRate', async (req, res ) => {
-    res.json({
-        vitamins: "getVitaminsByRate"
-    });
-});
+router.get("/getVitamins", vitaminController.fetchVitaminsAll);
 
-router.get('/getVitaminsByTag', async (req, res ) => {
-    res.json({
-        vitamins: "getVitaminsByTag"
-    });
-});
+router.get('/getVitaminsByName', );
 
-router.post('/addVitamin', (req, res) => {
-    res.json({
-        vitamin: "addVitamin"
-    });
-});
+router.get('/getVitaminsByRate', );
 
-router.put('/updateVitamin', (req, res) => {
-    res.json({
-        vitamin: "updateVitamin"
-    });
-});
+router.get('/getVitaminsByTag', );
 
-router.delete('/deleteVitamin', (req, res) => {
-    res.json({
-        vitamin: "deleteVitamin"
-    });
-});
+router.post('/createVitamin', );
+
+router.put('/updateVitamin', );
+
+router.delete('/deleteVitamin', );
 
 module.exports = router;

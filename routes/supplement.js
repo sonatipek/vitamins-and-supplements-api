@@ -26,7 +26,7 @@ router.get('/getSupplementsByTag', async (req, res) => {
     });
 });
 
-router.post('/addSupplement', async (req, res) => {
+router.post('/createSupplement', async (req, res) => {
     res.json({
         supplement: "addSupplement"
     });
