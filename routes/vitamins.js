@@ -8,16 +8,17 @@ const vitaminController = require('../controllers/vitaminController');
 
 router.get("/getVitamins", vitaminController.fetchVitaminsAll);
 
-router.get('/getVitaminsByName', );
+router.get('/getVitaminsByName', vitaminController.fetchVitaminsByName);
 
-router.get('/getVitaminsByRate', );
+router.get('/getVitaminsByRate', vitaminController.fetchVitaminsByRate);
 
-router.get('/getVitaminsByTag', );
+router.get('/getVitaminsByTag', vitaminController.fetchVitaminsByTag);
 
-router.post('/createVitamin', );
+router.post('/createVitamin', vitaminController.createVitamin);
 
-router.put('/updateVitamin', );
+router.put('/updateVitamin', vitaminController.updateVitamin);
 
-router.delete('/deleteVitamin', );
+router.delete('/deleteVitamin', vitaminController.deleteVitamin);
+
 
 module.exports = router;

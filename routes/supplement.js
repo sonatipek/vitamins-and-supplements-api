@@ -1,47 +1,25 @@
-const express = require('express');
 
+// Node Modules
+const express = require('express');
 const router = express.Router();
 
-router.get("/getSupplements", async (req, res) => {
-    res.json({
-        supplement: "getSupplements"
-    });
-});
+// Required Controller
+const supplementController = require('../controllers/supplementController');
 
-router.get('/getSupplementsByName', async (req, res) => {
-    res.json({
-        supplement: "getSupplementsByName"
-    });
-});
 
-router.get('/getSupplementsByRate', async (req, res) => {
-    res.json({
-        supplement: "getSupplementsByRate"
-    });
-});
+router.get("/getSupplements", supplementController.fetchSupplementsAll);
 
-router.get('/getSupplementsByTag', async (req, res) => {
-    res.json({
-        supplement: "getSupplementsByTag"
-    });
-});
+router.get('/getSupplementsByName', supplementController.fetchSupplementsByName);
 
-router.post('/createSupplement', async (req, res) => {
-    res.json({
-        supplement: "addSupplement"
-    });
-});
+router.get('/getSupplementsByRate', supplementController.fetchSupplementsByRate);
 
-router.put('/updateSupplement', async (req, res) => {
-    res.json({
-        supplement: "updateSupplement"
-    });
-});
+router.get('/getSupplementsByTag', supplementController.fetchSupplementsByTag);
 
-router.delete('/deleteSupplement', async (req, res) => {
-    res.json({
-        supplement: "deleteSupplement"
-    });
-});
+router.post('/createSupplement', supplementController.creatSupplement);
+
+router.put('/updateSupplement', supplementController.updatSupplement);
+
+router.delete('/deleteSupplement', supplementController.deletSupplement);
+
 
 module.exports = router;
