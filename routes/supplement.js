@@ -4,6 +4,7 @@ const express = require('express');
 const router = express.Router();
 // Custom Modules
 const authantication = require('../middlewares/authentication');
+const authorization = require('../middlewares/authorization');
 
 // Required Controller
 const supplementController = require('../controllers/supplementController');
@@ -15,11 +16,11 @@ router.get("/getSupplements", authantication, supplementController.fetchSuppleme
 
 router.get('/getSupplement', authantication, supplementController.fetchSupplementByName);
 
-router.post('/createSupplement', authantication, supplementController.createSupplement);
+router.post('/createSupplement', authantication, authorization, supplementController.createSupplement);
 
-router.put('/updateSupplement', authantication, supplementController.updateSupplement);
+router.put('/updateSupplement', authantication, authorization, supplementController.updateSupplement);
 
-router.delete('/deleteSupplement', authantication, supplementController.deleteSupplement);
+router.delete('/deleteSupplement', authantication, authorization, supplementController.deleteSupplement);
 
 
 module.exports = router;

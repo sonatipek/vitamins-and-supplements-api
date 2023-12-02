@@ -3,6 +3,7 @@ const express = require('express');
 const router = express.Router();
 // Custom Modules
 const authantication = require('../middlewares/authentication');
+const authorization = require('../middlewares/authorization');
 // Required Controller
 const vitaminController = require('../controllers/vitaminController');
 
@@ -13,11 +14,11 @@ router.get("/getVitamins", authantication, vitaminController.fetchVitaminsAll);
 
 router.get('/getVitamin', authantication, vitaminController.fetchVitaminByName);
 
-router.post('/createVitamin', authantication, vitaminController.createVitamin);
+router.post('/createVitamin', authantication, authorization, vitaminController.createVitamin);
 
-router.put('/updateVitamin', authantication, vitaminController.updateVitamin);
+router.put('/updateVitamin', authantication, authorization, vitaminController.updateVitamin);
 
-router.delete('/deleteVitamin', authantication, vitaminController.deleteVitamin);
+router.delete('/deleteVitamin', authantication, authorization, vitaminController.deleteVitamin);
 
 
 module.exports = router;

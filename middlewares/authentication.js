@@ -12,7 +12,8 @@ module.exports = asyncHandler(async (req, res, next) => {
             throw new CustomError("Authantication failed. Authantication token required", 401)
         };
 
-        jwt.verify(authToken, process.env.JWT_SECRET_KEY);
+        const decodedToken = jwt.verify(authToken, process.env.JWT_SECRET_KEY);
 
+        req.user = decodedToken;
         next();
 });
