@@ -1,6 +1,7 @@
 // Node Modules
 const {mongoose, Schema} = require('mongoose');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 // Create Schema
 const userSchema = new Schema({
@@ -37,6 +38,22 @@ const userSchema = new Schema({
     }
 });
 
+userSchema.methods.generateApiKey = async function (){
+    const {JWT_SECRET_KEY, JWT_EXPIRE} = process.env;
+
+    const payload = {
+        id: this._id,
+        email: this.email,
+        role: this.role
+    };
+
+    const token = jwt.sign(payload, JWT_SECRET_KEY, {
+        expiresIn: JWT_EXPIRE
+    });
+
+    return token;
+};
+
 userSchema.pre("save", function(next) {
     // Changed Password
     if(!this.isModified("password")) {
@@ -52,7 +69,7 @@ userSchema.pre("save", function(next) {
             this.password = hash;
             next();
         })
-    })
+    });
 });
 
 // Create Model
