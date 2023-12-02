@@ -1,4 +1,6 @@
+// Node Modules
 const {mongoose, Schema} = require('mongoose');
+const bcrypt = require('bcrypt');
 
 // Create Schema
 const userSchema = new Schema({
@@ -33,6 +35,24 @@ const userSchema = new Schema({
         type: Date,
         default: Date.now
     }
+});
+
+userSchema.pre("save", function(next) {
+    // Changed Password
+    if(!this.isModified("password")) {
+        next();
+    }
+
+    bcrypt.genSalt(10, (err, salt) =>{
+        if (err) next(err);
+
+        bcrypt.hash(this.password, salt, (err, hash) => {
+            if (err) next(err);
+
+            this.password = hash;
+            next();
+        })
+    })
 });
 
 // Create Model
