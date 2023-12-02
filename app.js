@@ -5,9 +5,13 @@ const mongoose = require('mongoose');
 require("dotenv").config();
 
 // *Custom Modules
+// Helpers
+const connectDatabase = require('./helpers/database/connectDatabse');
+
 // Routes Definitions
 const vitaminsRoutes = require('./routes/vitamins');
 const supplementsRoutes = require('./routes/supplement');
+const authRoutes = require('./routes/auth');
 
 
 // Instance
@@ -25,12 +29,11 @@ app.use(cors({
 // Routes
 app.use('/api/vitamin', vitaminsRoutes);
 app.use('/api/supplement', supplementsRoutes);
+app.use('/api/auth', authRoutes);
 
 
 // MongoDB Connection
-mongoose.connect(process.env.MONGO_CONNECTION)
-    .then(_ => console.log("MongoDB connection is succeeded."))
-    .catch((err) => console.log(err));
+connectDatabase();
 
     
 // Start server
