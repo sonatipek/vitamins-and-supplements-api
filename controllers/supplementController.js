@@ -1,97 +1,82 @@
+// Node Modules
+const asyncHandler = require('express-async-handler');
 // Required Model Modules
 const Supplement = require('../models/supplement');
+// Custom Error Module
+const CustomError = require('../helpers/error/CustomError');
 
+exports.fetchSupplementsByTag = asyncHandler(async (req, res, next) => {
+    const tagName = req.params.tag;
 
-exports.fetchSupplementsByTag = async (req, res) => {
-    try {
-        const tagName = req.params.tag;
+    const supplementsByTag = await Supplement.find({tags: tagName})
+        .select({__v: 0, _id: 0});
 
-        const supplementsByTag = await Supplement.find({tags: tagName})
-            .select({__v: 0, _id: 0});
-
-        if (!supplementsByTag.length) {
-            throw new Error("Supplement not found");
-        }
-        
-        res.status(200).json(supplementsByTag);
-    } catch (error) {
-        if (error.message === "Supplement not found") {
-            return res.status(404).json({
-                description: error.message,
-            });
-        }
-        
-        return res.status(500).json({
-            error: error.name,
-            description: error.message,
-        });
+    if (!supplementsByTag.length) {
+        throw new CustomError("Supplement not found", 404);
     }
-};
+    
+    res.status(200).json(supplementsByTag);
+});
 
-exports.fetchSupplementsAll = async (req, res) => {
-    try {
-        const rate = req.query.rate;
+exports.fetchSupplementsAll = asyncHandler(async (req, res, next) => {
+    const rate = req.query.rate;
 
-        if (rate) {
-            const supplements = await Supplement.find({rating: rate})
-                .select({__v: 0, _id: 0});
-                
-            return res.status(200).json(supplements);
-        };
+    if (rate) {
+        const supplements = await Supplement.find({rating: rate})
+            .select({__v: 0, _id: 0});
             
-        const supplements = await Supplement.find()
-            .select({__v: 0, _id: 0});
-
         return res.status(200).json(supplements);
+    };
         
-    } catch (error) {
-        return res.status(500).json({
-            error: error.name,
-            description: error.message
-        });
+    const supplements = await Supplement.find()
+        .select({__v: 0, _id: 0});
+
+    return res.status(200).json(supplements);
+});
+
+exports.fetchSupplementByName = asyncHandler(async (req, res, next) => {
+    const supplementName = req.query.name;
+
+    if (!supplementName) {
+        throw new CustomError("Query parameter 'name' is required",400);
     }
-};
 
-exports.fetchSupplementByName = async (req, res) => {
-    try {
-        const supplementName = req.query.name;
+    const supplement = await Supplement.find({name: supplementName})
+        .select({__v: 0});
 
-        if (!supplementName) {
-            throw new Error("Query parameter 'name' is required");
-        }
-
-        const supplement = await Supplement.find({name: supplementName})
-            .select({__v: 0});
-
-        if (!supplement.length) {
-            throw new Error("Supplement not found");
-        }
-     
-        return res.status(200).json(supplement);
-
-    } catch (error) {
-        if (error.message === "Query parameter 'name' is required") {
-            return res.status(400).json({
-                description: error.message,
-            });
-        }
-
-        if (error.message === "Supplement not found") {
-            return res.status(404).json({
-                description: error.message,
-            });
-        }
-        
-        return res.status(500).json({
-            error: error.name,
-            description: error.message,
-        });
+    if (!supplement.length) {
+        throw new CustomError("Supplement not found",404);
     }
-};
+    
+    return res.status(200).json(supplement);
+});
 
-exports.createSupplement = async (req, res) => {
-    try {
-        const newSupplement = new Supplement({
+exports.createSupplement = asyncHandler(async (req, res, next) => {
+    const newSupplement = new Supplement({
+        name: req.body.name,
+        rating: req.body.rating,
+        recommendation: req.body.recommendation,
+        tags: req.body.tags,
+        benefits: req.body.benefits,
+        whoShouldUse: req.body.whoShouldUse,
+        dose: req.body.dose,
+        timing: req.body.timing,
+        suggestions: req.body.suggestions
+    });
+
+    await newSupplement.save();
+    return res.status(201).json(newSupplement);
+});
+
+exports.updateSupplement = asyncHandler(async (req, res, next) => {
+    const supplementName = req.query.name;
+    
+    if (!supplementName) {
+        throw new CustomError("Query parameter 'name' is required", 400);
+    }
+
+    const supplement = await Supplement.findOneAndUpdate({name: supplementName}, {
+        $set: {
             name: req.body.name,
             rating: req.body.rating,
             recommendation: req.body.recommendation,
@@ -101,111 +86,28 @@ exports.createSupplement = async (req, res) => {
             dose: req.body.dose,
             timing: req.body.timing,
             suggestions: req.body.suggestions
-        });
+        }
+    }, {new: true})
+
+    if (!supplement) {
+        throw new Error("Supplement not found",404);
+    }
+
+    res.status(200).json(supplement);
+});
+
+exports.deleteSupplement = asyncHandler(async (req, res, next) => {
+    const supplementName = req.query.name;
     
-        await newSupplement.save();
-        return res.status(201).json(newSupplement);
-
-    } catch (error) {
-        if (error.name == "MongooseError") {
-            return res.status(500).json({
-                error: error.name,
-                description: error.message
-            });
-        }
-
-        return res.status(400).json({
-            error: error.name,
-            description: error.message,
-            keyValue: error.keyValue
-        });
+    if (!supplementName) {
+        throw new CustomError("Query parameter 'name' is required",400);
     }
-}
 
-exports.updateSupplement = async (req, res) => {
-    try {
-        const supplementName = req.query.name;
-        
-        if (!supplementName) {
-            throw new Error("Query parameter 'name' is required");
-        }
+    const supplement = await Supplement.findOneAndDelete({name:supplementName})
 
-        const supplement = await Supplement.findOneAndUpdate({name: supplementName}, {
-            $set: {
-                name: req.body.name,
-                rating: req.body.rating,
-                recommendation: req.body.recommendation,
-                tags: req.body.tags,
-                benefits: req.body.benefits,
-                whoShouldUse: req.body.whoShouldUse,
-                dose: req.body.dose,
-                timing: req.body.timing,
-                suggestions: req.body.suggestions
-            }
-        }, {new: true})
-
-        if (!supplement) {
-            throw new Error("Supplement not found");
-        }
-
-        res.status(200).json(supplement);
-        
-    } catch (error) {
-        if (error.message === "Query parameter 'name' is required") {
-            return res.status(400).json({
-                description: error.message,
-            });
-        }
-
-        if (error.message === "Supplement not found") {
-            return res.status(404).json({
-                description: error.message,
-            });
-        }
-        
-        return res.status(500).json({
-            error: error.name,
-            description: error.message,
-        });
-
-        
+    if (!supplement) {
+        throw new CustomError("Supplement not found",404);
     }
-}
 
-exports.deleteSupplement = async (req, res) => {
-    try {
-        const supplementName = req.query.name;
-        
-        if (!supplementName) {
-            throw new Error("Query parameter 'name' is required");
-        }
-
-        const supplement = await Supplement.findOneAndDelete({name:supplementName})
-
-        if (!supplement) {
-            throw new Error("Supplement not found");
-        }
-
-        res.status(200).json(supplement);
-        
-    } catch (error) {
-        if (error.message === "Query parameter 'name' is required") {
-            return res.status(400).json({
-                description: error.message,
-            });
-        }
-
-        if (error.message === "Supplement not found") {
-            return res.status(404).json({
-                description: error.message,
-            });
-        }
-        
-        return res.status(500).json({
-            error: error.name,
-            description: error.message,
-        });
-
-        
-    }
-};
+    res.status(200).json(supplement);
+});

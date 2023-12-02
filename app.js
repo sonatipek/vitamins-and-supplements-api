@@ -8,6 +8,9 @@ require("dotenv").config();
 // Helpers
 const connectDatabase = require('./helpers/database/connectDatabse');
 
+// Middlwares
+const customErrorHandler = require('./middlewares/errors/customErrorHandler');
+
 // Routes Definitions
 const vitaminsRoutes = require('./routes/vitamins');
 const supplementsRoutes = require('./routes/supplement');
@@ -20,18 +23,18 @@ const app = express();
 
 // App settings and middlewares
 app.use(express.json()) //Read json objects
-app.use(cors({
+app.use(cors({  //CORS Settings
     origin: "*",
     methods: ["GET"]
 }));
-
 
 // Routes
 app.use('/api/vitamin', vitaminsRoutes);
 app.use('/api/supplement', supplementsRoutes);
 app.use('/api/auth', authRoutes);
 
-
+// Custom Error Handler
+app.use(customErrorHandler)
 // MongoDB Connection
 connectDatabase();
 
