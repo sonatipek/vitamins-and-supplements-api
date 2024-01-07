@@ -14,6 +14,8 @@ const customErrorHandler = require('./middlewares/errors/customErrorHandler');
 // Routes Definitions
 const vitaminsRoutes = require('./routes/vitamins');
 const supplementsRoutes = require('./routes/supplement');
+const categoriesRoutes = require('./routes/categories');
+const searchesRoutes = require('./routes/searches');
 const authRoutes = require('./routes/auth');
 
 
@@ -31,6 +33,8 @@ app.use(cors({  //CORS Settings
 // Routes
 app.use('/api/vitamin', vitaminsRoutes);
 app.use('/api/supplement', supplementsRoutes);
+app.use('/api/category', categoriesRoutes);
+app.use('/api/search', searchesRoutes);
 app.use('/api/auth', authRoutes);
 
 // Custom Error Handler
