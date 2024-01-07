@@ -7,23 +7,15 @@ const authorization = require('../middlewares/authorization');
 // Required Controller
 const vitaminController = require('../controllers/vitaminController');
 
-router.get('/test', () => {
-    const {JWT_SECRET_KEY, JWT_EXPIRE} = process.env;
-    
-    console.log(JWT_SECRET_KEY);
-});
 
-router.get('/getVitamins/:tag', authantication, vitaminController.fetchVitaminsByTag);
+router.post('/create', authantication, authorization, vitaminController.createVitamin);
 
-router.get("/getVitamins", authantication, vitaminController.fetchVitaminsAll);
+router.put('/update', authantication, authorization, vitaminController.updateVitamin);
 
-router.get('/getVitamin', authantication, vitaminController.fetchVitaminByName);
+router.delete('/delete', authantication, authorization, vitaminController.deleteVitamin);
 
-router.post('/createVitamin', authantication, authorization, vitaminController.createVitamin);
+router.get('/:tag', authantication, vitaminController.fetchVitaminsByTag);
 
-router.put('/updateVitamin', authantication, authorization, vitaminController.updateVitamin);
-
-router.delete('/deleteVitamin', authantication, authorization, vitaminController.deleteVitamin);
-
+router.get("/", authantication, vitaminController.fetchVitaminsAll);
 
 module.exports = router;
