@@ -34,23 +34,6 @@ exports.fetchSupplementsAll = asyncHandler(async (req, res, next) => {
     return res.status(200).json(supplements);
 });
 
-exports.fetchSupplementByName = asyncHandler(async (req, res, next) => {
-    const supplementName = req.query.name;
-
-    if (!supplementName) {
-        throw new CustomError("Query parameter 'name' is required",400);
-    }
-
-    const supplement = await Supplement.find({name: supplementName})
-        .select({__v: 0});
-
-    if (!supplement.length) {
-        throw new CustomError("Supplement not found",404);
-    }
-    
-    return res.status(200).json(supplement);
-});
-
 exports.createSupplement = asyncHandler(async (req, res, next) => {
     const newSupplement = new Supplement({
         name: req.body.name,
@@ -64,6 +47,9 @@ exports.createSupplement = asyncHandler(async (req, res, next) => {
         suggestions: req.body.suggestions
     });
 
+    const supplementUrl = await newSupplement.createSlugField();
+    newSupplement.url = supplementUrl;
+    
     await newSupplement.save();
     return res.status(201).json(newSupplement);
 });
