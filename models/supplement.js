@@ -38,8 +38,24 @@ const supplementSchema = new Schema({
     suggestions: {
         type: [String], 
         required: true
+    },
+    url: {
+        type: String,
+        required: false,
+        unique: true
     }
 });
+
+supplementSchema.methods.createSlugField = async function (){
+    const url = this.name
+         .trim()
+        .replaceAll(" ", '-')
+        .toLowerCase();
+
+
+    return url;
+};
+
 
 // Create Model
 const Supplement = mongoose.model('Supplement', supplementSchema);

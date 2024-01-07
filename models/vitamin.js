@@ -38,8 +38,23 @@ const vitaminSchema = new Schema({
     suggestions: {
         type: [String], 
         required: true
+    },
+    url: {
+        type: String,
+        required: false,
+        unique: true
     }
 });
+
+vitaminSchema.methods.createSlugField = async function (){
+    const url = this.name
+         .trim()
+        .replaceAll(" ", '-')
+        .toLowerCase();
+
+
+    return url;
+};
 
 // Create Model
 const Vitamin = mongoose.model('Vitamin', vitaminSchema);
