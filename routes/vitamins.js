@@ -7,6 +7,9 @@ const authorization = require('../middlewares/authorization');
 // Required Controller
 const vitaminController = require('../controllers/vitaminController');
 
+router.get('/test', () => {
+    console.log(process.env.JWT_SECRET_KEY);
+});
 
 router.get('/getVitamins/:tag', authantication, vitaminController.fetchVitaminsByTag);
 
