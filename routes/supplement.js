@@ -10,17 +10,16 @@ const authorization = require('../middlewares/authorization');
 const supplementController = require('../controllers/supplementController');
 
 
-router.get('/getSupplements/:tag', authantication, supplementController.fetchSupplementsByTag);
 
-router.get("/getSupplements", authantication, supplementController.fetchSupplementsAll);
+router.post('/create', authantication, authorization, supplementController.createSupplement);
 
-router.get('/getSupplement', authantication, supplementController.fetchSupplementByName);
+router.put('/update', authantication, authorization, supplementController.updateSupplement);
 
-router.post('/createSupplement', authantication, authorization, supplementController.createSupplement);
+router.delete('/delete', authantication, authorization, supplementController.deleteSupplement);
 
-router.put('/updateSupplement', authantication, authorization, supplementController.updateSupplement);
+router.get('/:tag', authantication, supplementController.fetchSupplementsByTag);
 
-router.delete('/deleteSupplement', authantication, authorization, supplementController.deleteSupplement);
+router.get("/", authantication, supplementController.fetchSupplementsAll);
 
 
 module.exports = router;
