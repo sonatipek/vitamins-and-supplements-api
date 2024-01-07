@@ -35,23 +35,6 @@ exports.fetchVitaminsAll = asyncHandler(async (req, res, next) => {
     return res.status(200).json(vitamins);      
 });
 
-exports.fetchVitaminByName = asyncHandler(async (req, res, next) => {
-    const vitaminName = req.query.name;
-
-    if (!vitaminName) {
-        throw new CustomError("Query parameter 'name' is required", 400);
-    }
-
-    const vitamin = await Vitamin.find({name: vitaminName})
-        .select({__v: 0});
-
-    if (!vitamin.length) {
-        throw new CustomError("Vitamin not found", 404);
-    }
-    
-    return res.status(200).json(vitamin);
-});
-
 exports.createVitamin = asyncHandler(async (req, res, next) => {
     const newVitamin = new Vitamin({
         name: req.body.name,
@@ -64,6 +47,9 @@ exports.createVitamin = asyncHandler(async (req, res, next) => {
         timing: req.body.timing,
         suggestions: req.body.suggestions
     });
+
+    const vitaminUrl = await newVitamin.createSlugField();
+    newVitamin.url = vitaminUrl;
 
     await newVitamin.save();
     return res.status(201).json(newVitamin);
