@@ -16,7 +16,7 @@ exports.fetchVitaminByName = asyncHandler(async (req, res, next) => {
         throw new CustomError("Query parameter 'name' is required", 400);
     }
 
-    const vitamin = await Vitamin.find({name: vitaminName})
+    const vitamin = await Vitamin.find({name: { $regex: vitaminName, $options: 'i' } })
         .select({__v: 0});
 
     if (!vitamin.length) {
@@ -33,7 +33,7 @@ exports.fetchSupplementByName = asyncHandler(async (req, res, next) => {
         throw new CustomError("Query parameter 'name' is required",400);
     }
 
-    const supplement = await Supplement.find({name: supplementName})
+    const supplement = await Supplement.find({name: { $regex: supplementName, $options: 'i' } })
         .select({__v: 0});
 
     if (!supplement.length) {
