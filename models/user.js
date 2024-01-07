@@ -47,7 +47,7 @@ userSchema.methods.generateApiKey = async function (){
         role: this.role
     };
 
-    const token = jwt.sign(payload, JWT_SECRET_KEY, {
+    const token = jwt.sign(payload, `${JWT_SECRET_KEY}`, {
         expiresIn: JWT_EXPIRE
     });
 
