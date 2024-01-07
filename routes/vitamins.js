@@ -8,7 +8,9 @@ const authorization = require('../middlewares/authorization');
 const vitaminController = require('../controllers/vitaminController');
 
 router.get('/test', () => {
-    console.log(process.env.JWT_SECRET_KEY);
+    const {JWT_SECRET_KEY, JWT_EXPIRE} = process.env;
+    
+    console.log(JWT_SECRET_KEY);
 });
 
 router.get('/getVitamins/:tag', authantication, vitaminController.fetchVitaminsByTag);
