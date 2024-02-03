@@ -4,7 +4,6 @@ const router = express.Router();
 
 // Custom Modules
 const authantication = require('../middlewares/authentication');
-const authorization = require('../middlewares/authorization');
 
 // Required Controller
 const searchController = require('../controllers/searchController');
