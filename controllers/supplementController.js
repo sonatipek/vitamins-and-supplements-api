@@ -18,16 +18,7 @@ exports.fetchSupplementsByTag = asyncHandler(async (req, res, next) => {
     res.status(200).json(supplementsByTag);
 });
 
-exports.fetchSupplementsAll = asyncHandler(async (req, res, next) => {
-    const rate = req.query.rate;
-
-    if (rate) {
-        const supplements = await Supplement.find({rating: rate})
-            .select({__v: 0, _id: 0});
-            
-        return res.status(200).json(supplements);
-    };
-        
+exports.fetchSupplementsAll = asyncHandler(async (req, res, next) => {      
     const supplements = await Supplement.find()
         .select({__v: 0, _id: 0});
 

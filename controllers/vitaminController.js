@@ -19,16 +19,7 @@ exports.fetchVitaminsByTag = asyncHandler(async (req, res, next) => {
     res.status(200).json(vitaminsByTag);
 });
 
-exports.fetchVitaminsAll = asyncHandler(async (req, res, next) => {
-    const rate = req.query.rate;
-
-    if (rate) {
-        const vitamins = await Vitamin.find({rating: rate})
-            .select({__v: 0, _id: 0});
-            
-        return res.status(200).json(vitamins);
-    };
-        
+exports.fetchVitaminsAll = asyncHandler(async (req, res, next) => {       
     const vitamins = await Vitamin.find()
         .select({__v: 0, _id: 0});
 
