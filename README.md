@@ -9,7 +9,7 @@ _Does not contain recommendations for use, I recommend that you consult your doc
 
 ## Related Project
 
-You can access the "vitamins&supplements" infographic frontend project I developed using this API from the link below: <br>[Vitamins & Supplements](https://github.com/sonatipek/)
+You can access the "vitamins&supplements" infographic frontend project I developed using this API from the link below: <br>[Vitamins & Supplements](https://github.com/sonatipek/vitamins-and-supplements-frontend)
 
 ## Tech Stack
 
