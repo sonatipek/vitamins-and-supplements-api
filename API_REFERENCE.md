@@ -1,5 +1,3 @@
-<!-- TODO: AUTH kısmında üye kaydı olurken rol giriliyor. bu saçma, girilmemeli sıkıntı çıkabilir. insanlar farklı amaçlarla kaydolaiblr -->
-
 ## API Reference
 
 (POST methods are closed for use. However, it will work correctly when you run it on your computer)

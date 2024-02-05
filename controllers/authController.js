@@ -4,13 +4,13 @@ const asyncHandler = require('express-async-handler');
 const User = require('../models/user');
 
 exports.createUser = asyncHandler(async (req, res, next) => {
-    const {username, email, password, role} = req.body;
+    const {username, email, password} = req.body;
 
     const newUser = await User.create({
         username: username,
         email: email,
         password: password,
-        role: role,
+        role: "user",
     });
  
     let apiKey = await newUser.generateApiKey();
