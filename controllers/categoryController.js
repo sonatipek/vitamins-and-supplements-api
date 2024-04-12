@@ -12,12 +12,20 @@ const CustomError = require('../helpers/error/CustomError');
 exports.fetchAllCategories = asyncHandler(async (req, res, next) => {
     const allCategories = new Set();
     
-    const supplementCategories = await Supplement.find()
+    let supplementCategories = await Supplement.find()
         .select({tags:1, _id: 0});
 
-        
-    const vitaminCategories = await Vitamin.find()
+    let vitaminCategories = await Vitamin.find()
         .select({tags:1, _id: 0});
+
+    // Tüm tag'leri tek bir dizi içine yerleştir
+    supplementCategories = supplementCategories.reduce(function(acc, val) {
+        return acc.concat(val.tags);
+    }, []);
+
+    vitaminCategories = vitaminCategories.reduce(function(acc, val) {
+        return acc.concat(val.tags);
+    }, []);    
 
 
     if (!vitaminCategories.length || !supplementCategories.length) {
@@ -25,11 +33,11 @@ exports.fetchAllCategories = asyncHandler(async (req, res, next) => {
     }
 
     vitaminCategories.forEach(category => {
-        allCategories.add(...category.tags)
+        allCategories.add(category)
     });
     
     supplementCategories.forEach(category => {
-        allCategories.add(...category.tags)
+        allCategories.add(category)
     });
 
     return res.status(200).json([...allCategories]);
@@ -39,8 +47,13 @@ exports.fetchAllCategories = asyncHandler(async (req, res, next) => {
 exports.fetchSupplementCategories = asyncHandler(async (req, res, next) => {
     const supplementCategories = new Set();
     
-    const categories = await Supplement.find()
+    let categories = await Supplement.find()
     .select({tags:1, _id: 0});
+
+    // Tüm tag'leri tek bir dizi içine yerleştir
+    categories = categories.reduce(function(acc, val) {
+        return acc.concat(val.tags);
+    }, []);
     
     
     if (!categories.length) {
@@ -48,7 +61,7 @@ exports.fetchSupplementCategories = asyncHandler(async (req, res, next) => {
     }
     
     categories.forEach(category => {
-        supplementCategories.add(...category.tags)
+        supplementCategories.add(category)
     });
 
     return res.status(200).json([...supplementCategories]);
@@ -57,16 +70,20 @@ exports.fetchSupplementCategories = asyncHandler(async (req, res, next) => {
 exports.fetchVitaminCategories = asyncHandler(async (req, res, next) => {
     const vitaminCategories = new Set();
         
-    const categories = await Vitamin.find()
+    let categories = await Vitamin.find()
         .select({tags:1, _id: 0});
 
+    // Tüm tag'leri tek bir dizi içine yerleştir
+    categories = categories.reduce(function(acc, val) {
+        return acc.concat(val.tags);
+    }, []);
 
     if (!categories.length) {
         throw new CustomError("Category not found", 404);
     }
 
     categories.forEach(category => {
-        vitaminCategories.add(...category.tags)
+        vitaminCategories.add(category)
     });
     
     return res.status(200).json([...vitaminCategories]);
