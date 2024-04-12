@@ -20,7 +20,7 @@ exports.fetchAllCategories = asyncHandler(async (req, res, next) => {
         .select({tags:1, _id: 0});
 
 
-    if (!vitaminsCategories.length || !supplementsCategories.length) {
+    if (!vitaminCategories.length || !supplementCategories.length) {
         throw new CustomError("Category not found", 404);
     }
 
